@@ -1,0 +1,150 @@
+UseCaseModel QMS {
+
+	UC::addSupplier definedBySSD(AddSupplierSSD) relatedService(AddSupplierService)
+	UC::publishTask definedBySSD(PublishTaskSSD) relatedService(PublishTaskService)
+	UC::recieveReport
+	UC::settleAccount
+	UC::recieveTask
+	UC::makeReport
+	UC::reconcile
+	UC::addPlatformOperator include inputPlatformOperatorInfo, savePlatformOperatorInfo definedBySSD(AddPlatformOperatorSSD) relatedService(AddPlatformOperatorService)
+	UC::inputPlatformOperatorInfo
+	UC::savePlatformOperatorInfo
+
+	Actor Administrator {
+		addPlatformOperator
+	}
+
+	Actor Supplier {
+		recieveTask
+		makeReport
+		reconcile
+	}
+
+	Actor PlatformOperator {
+		addSupplier
+		publishTask
+		recieveReport
+		settleAccount
+	}
+
+	Interaction PublishTaskSSD {
+
+		[Participants: PlatformOperator PublishTaskService]
+
+	}
+
+	Interaction AddSupplierSSD {
+
+		[Participants: PlatformOperator AddSupplierService]
+
+		CallMessage::AddSuplierSSDCallMessage1(addSupplier AddSuplierSSDCallMessage1SendingEnd -> AddSuplierSSDExecution1StartEnd)
+		ReturnMessage::AddSuplierSSDCallMessage1Return(AddSuplierSSDExecution1FinishEnd -> AddSuplierSSDCallMessage1ReturnReceivingEnd AddSuplierSSDCallMessage1)
+
+		Execution::AddSuplierSSDExecution1(AddSupplierService AddSuplierSSDExecution1StartEnd AddSuplierSSDExecution1FinishEnd)
+
+		MessageEnd::AddSuplierSSDCallMessage1SendingEnd(PlatformOperator AddSuplierSSDCallMessage1)
+		ExecutionEnd::AddSuplierSSDExecution1StartEnd(AddSupplierService AddSuplierSSDExecution1)
+		ExecutionEnd::AddSuplierSSDExecution1FinishEnd(AddSupplierService AddSuplierSSDExecution1)
+		MessageEnd::AddSuplierSSDCallMessage1ReturnReceivingEnd(PlatformOperator AddSuplierSSDCallMessage1Return)
+
+	}
+
+	Interaction AddPlatformOperatorSSD {
+
+		[Participants: Administrator AddPlatformOperatorService]
+
+		CallMessage::AddPlatformOperatorSSDCallMessage1(inputOperatorInfo AddPlatformOperatorSSDCallMessage1SendingEnd -> AddSuplierSSDExecution1FinishEnd)
+		ReturnMessage::returnCheckResult(AddSuplierSSDCallMessage1SendingEnd -> AddPlatformOperatorSSDCallMessage1ReturnReceivingEnd AddPlatformOperatorSSDCallMessage1)
+		CallMessage::AddPlatformOperatorSSDCallMessage3(saveOperator AddPlatformOperatorSSDCallMessage3SendingEnd -> AddPlatformOperatorSSDExecution1FinishEnd)
+		ReturnMessage::AddPlatformOperatorSSDCallMessage3Return(AddPlatformOperatorSSDCallMessage3ReturnReceivingEnd -> AddPlatformOperatorSSDCallMessage3ReturnReceivingEnd AddPlatformOperatorSSDCallMessage3)
+		CallMessage::AddPlatformOperatorSSDCallMessage5(inputOperatorInfo AddPlatformOperatorSSDCallMessage5SendingEnd -> AddPlatformOperatorSSDExecution1StartEnd)
+		ReturnMessage::AddPlatformOperatorSSDCallMessage5Return(AddPlatformOperatorSSDCallMessage3SendingEnd -> AddPlatformOperatorSSDCallMessage5ReturnReceivingEnd AddPlatformOperatorSSDCallMessage5)
+
+		Execution::AddPlatformOperatorSSDExecution1(AddPlatformOperatorService AddPlatformOperatorSSDExecution1StartEnd AddPlatformOperatorSSDExecution1FinishEnd)
+
+		MessageEnd::AddPlatformOperatorSSDCallMessage5SendingEnd(Administrator AddPlatformOperatorSSDCallMessage5)
+		ExecutionEnd::AddPlatformOperatorSSDExecution1StartEnd(AddPlatformOperatorService AddPlatformOperatorSSDExecution1)
+		ExecutionEnd::AddPlatformOperatorSSDExecution1FinishEnd(AddPlatformOperatorService AddPlatformOperatorSSDExecution1)
+		MessageEnd::AddPlatformOperatorSSDCallMessage5ReturnReceivingEnd(Administrator AddPlatformOperatorSSDCallMessage5Return)
+		MessageEnd::AddPlatformOperatorSSDCallMessage1SendingEnd(Administrator AddPlatformOperatorSSDCallMessage1)
+		MessageEnd::AddPlatformOperatorSSDCallMessage1ReturnReceivingEnd(Administrator returnCheckResult)
+		MessageEnd::AddPlatformOperatorSSDCallMessage3SendingEnd(Administrator AddPlatformOperatorSSDCallMessage3)
+		MessageEnd::AddPlatformOperatorSSDCallMessage3ReturnReceivingEnd(Administrator AddPlatformOperatorSSDCallMessage3Return)
+
+	}
+
+	Service QMSSystem {
+
+	}
+
+	Service ThirdPartyServices {
+
+	}
+
+	Service Usecase1Service {
+
+	}
+
+	Service PublishTaskService {
+
+	}
+
+	Service AddSupplierService {
+
+		[Operation]
+		addSupplier()
+
+	}
+
+	Service AddPlatformOperatorService {
+
+		[Operation]
+		saveOperator(operator)
+		saveOperatorInfo()
+		inputOperatorInfo()
+
+	}
+
+	Contract AddPlatformOperatorService::saveOperator(operator :Operator) : Boolean {
+
+		/* precondition: skeleton */
+		precondition:
+			true
+
+		/* postcondition: skeleton */
+		postcondition:
+			true
+	}
+
+}
+
+DomainModel QMS {
+
+	Entity Supplier extends User {
+		@Description( "" ) Type : SupplierType[QC|DIV]
+	}
+
+	Entity Task {
+		Id : String
+		Name : String
+		Content : String
+		Publisher : String
+		Price : String
+		Excutor : String
+
+		[Refer]
+		TasktoSupplier : Supplier Association
+		TasktoOperator : Operator Association
+	}
+
+	Entity Operator extends User {
+		@Description( "" ) }
+
+	Entity User {
+		@Description( "" ) User_id : String
+		User_name : String
+	}
+
+}
+
