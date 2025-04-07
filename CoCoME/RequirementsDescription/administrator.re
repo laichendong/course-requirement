@@ -6,3 +6,7 @@ As a Administrator, I want to add catalog, so that I can manager item by its cat
 		(System) 3. When save button on clicked the CoCoME shall Records new catalog data and  relationship whit its parent.
 	}
 }
+
+As a Administrator, I want to manage stor, so that I can add or delete stors
+
+As a Administrator, I want to manage cashier, so that I can add or remove a casher into system

@@ -5,10 +5,10 @@ UseCaseModel CoCoME {
 	UC::processSale() definedBySSD(ProcessSaleSSD) relatedService(ProcessSaleService) @Description( "The cashier checks out items" )
 	UC::openCashDesk() @Description( "The cashier opens cash desk" )
 	UC::closeCashDesk() @Description( "The cashier closes cash desk" )
-	UC::orderProducts() @Description( "The store manager places an order for purchase" )
+	UC::orderProducts() definedBySSD(OrderProductsSSD) relatedService(OrderProductsService) @Description( "The store manager places an order for purchase" )
 	UC::receiveOrderedProduct() @Description( "The store manager receives the order for purchase" )
 	UC::showStockReports() @Description( "The store manager views the stock report" )
-	UC::changePrice() @Description( "The store manager changes the price of item" )
+	UC::changePrice() definedBySSD(ChangePriceSSD) relatedService(ChangePriceService) @Description( "The store manager changes the price of item" )
 	UC::listSuppliers() @Description( "The store manager views all suppliers" )
 	UC::openStore() @Description( "The store manager opens the store" )
 	UC::closeStore() @Description( "The store manager closes the store" )
@@ -111,6 +111,73 @@ UseCaseModel CoCoME {
 		ExecutionEnd::makeCardPaymentFinish(ProcessSaleService makeCardPayment)
 		MessageEnd::makeCardPaymentReturnReceiver(Cashier makeCardPaymentReturn)
 		CombinedFragmentEnd::PaymentMethodAltFinish(paymentMethodAlt)
+
+	}
+
+	Interaction OrderProductsSSD {
+
+		[Participants: StoreManager OrderProductsService]
+
+		CallMessage::OrderProductsSSDCallMessage1(selectSupplier OrderProductsSSDCallMessage1SendingEnd -> OrderProductsSSDExecution1StartEnd)
+		ReturnMessage::OrderProductsSSDCallMessage1Return(OrderProductsSSDExecution1FinishEnd -> OrderProductsSSDCallMessage1ReturnReceivingEnd OrderProductsSSDCallMessage1)
+		CallMessage::OrderProductsSSDCallMessage3(selectItemsToOrder OrderProductsSSDCallMessage3SendingEnd -> OrderProductsSSDExecution2StartEnd)
+		ReturnMessage::OrderProductsSSDCallMessage3Return(OrderProductsSSDExecution2FinishEnd -> OrderProductsSSDCallMessage3ReturnReceivingEnd OrderProductsSSDCallMessage3)
+		CallMessage::OrderProductsSSDCallMessage5(setOrderCount OrderProductsSSDCallMessage5SendingEnd -> OrderProductsSSDExecution3StartEnd)
+		ReturnMessage::OrderProductsSSDCallMessage5Return(OrderProductsSSDExecution3FinishEnd -> OrderProductsSSDCallMessage5ReturnReceivingEnd OrderProductsSSDCallMessage5)
+		CallMessage::OrderProductsSSDCallMessage7(submitOrder OrderProductsSSDCallMessage7SendingEnd -> OrderProductsSSDExecution4StartEnd)
+		ReturnMessage::OrderProductsSSDCallMessage7Return(OrderProductsSSDExecution4FinishEnd -> OrderProductsSSDCallMessage7ReturnReceivingEnd OrderProductsSSDCallMessage7)
+
+		Execution::OrderProductsSSDExecution1(OrderProductsService OrderProductsSSDExecution1StartEnd OrderProductsSSDExecution1FinishEnd)
+		Execution::OrderProductsSSDExecution2(OrderProductsService OrderProductsSSDExecution2StartEnd OrderProductsSSDExecution2FinishEnd)
+		Execution::OrderProductsSSDExecution3(OrderProductsService OrderProductsSSDExecution3StartEnd OrderProductsSSDExecution3FinishEnd)
+		Execution::OrderProductsSSDExecution4(OrderProductsService OrderProductsSSDExecution4StartEnd OrderProductsSSDExecution4FinishEnd)
+
+		MessageEnd::OrderProductsSSDCallMessage1SendingEnd(StoreManager OrderProductsSSDCallMessage1)
+		ExecutionEnd::OrderProductsSSDExecution1StartEnd(OrderProductsService OrderProductsSSDExecution1)
+		ExecutionEnd::OrderProductsSSDExecution1FinishEnd(OrderProductsService OrderProductsSSDExecution1)
+		MessageEnd::OrderProductsSSDCallMessage1ReturnReceivingEnd(StoreManager OrderProductsSSDCallMessage1Return)
+		MessageEnd::OrderProductsSSDCallMessage3SendingEnd(StoreManager OrderProductsSSDCallMessage3)
+		ExecutionEnd::OrderProductsSSDExecution2StartEnd(OrderProductsService OrderProductsSSDExecution2)
+		ExecutionEnd::OrderProductsSSDExecution2FinishEnd(OrderProductsService OrderProductsSSDExecution2)
+		MessageEnd::OrderProductsSSDCallMessage3ReturnReceivingEnd(StoreManager OrderProductsSSDCallMessage3Return)
+		MessageEnd::OrderProductsSSDCallMessage5SendingEnd(StoreManager OrderProductsSSDCallMessage5)
+		ExecutionEnd::OrderProductsSSDExecution3StartEnd(OrderProductsService OrderProductsSSDExecution3)
+		ExecutionEnd::OrderProductsSSDExecution3FinishEnd(OrderProductsService OrderProductsSSDExecution3)
+		MessageEnd::OrderProductsSSDCallMessage5ReturnReceivingEnd(StoreManager OrderProductsSSDCallMessage5Return)
+		MessageEnd::OrderProductsSSDCallMessage7SendingEnd(StoreManager OrderProductsSSDCallMessage7)
+		ExecutionEnd::OrderProductsSSDExecution4StartEnd(OrderProductsService OrderProductsSSDExecution4)
+		ExecutionEnd::OrderProductsSSDExecution4FinishEnd(OrderProductsService OrderProductsSSDExecution4)
+		MessageEnd::OrderProductsSSDCallMessage7ReturnReceivingEnd(StoreManager OrderProductsSSDCallMessage7Return)
+
+	}
+
+	Interaction ChangePriceSSD {
+
+		[Participants: StoreManager ChangePriceService]
+
+		CallMessage::ChangePriceSSDCallMessage1(queryItems ChangePriceSSDCallMessage1SendingEnd -> ChangePriceSSDExecution1StartEnd)
+		ReturnMessage::ChangePriceSSDCallMessage1Return(ChangePriceSSDExecution1FinishEnd -> ChangePriceSSDCallMessage1ReturnReceivingEnd ChangePriceSSDCallMessage1)
+		CallMessage::ChangePriceSSDCallMessage3(selectItem ChangePriceSSDCallMessage3SendingEnd -> ChangePriceSSDExecution2StartEnd)
+		ReturnMessage::ChangePriceSSDCallMessage3Return(ChangePriceSSDExecution2FinishEnd -> ChangePriceSSDCallMessage3ReturnReceivingEnd ChangePriceSSDCallMessage3)
+		CallMessage::ChangePriceSSDCallMessage5(setNewPrice ChangePriceSSDCallMessage5SendingEnd -> ChangePriceSSDExecution3StartEnd)
+		ReturnMessage::ChangePriceSSDCallMessage5Return(ChangePriceSSDExecution3FinishEnd -> ChangePriceSSDCallMessage5ReturnReceivingEnd ChangePriceSSDCallMessage5)
+
+		Execution::ChangePriceSSDExecution1(ChangePriceService ChangePriceSSDExecution1StartEnd ChangePriceSSDExecution1FinishEnd)
+		Execution::ChangePriceSSDExecution2(ChangePriceService ChangePriceSSDExecution2StartEnd ChangePriceSSDExecution2FinishEnd)
+		Execution::ChangePriceSSDExecution3(ChangePriceService ChangePriceSSDExecution3StartEnd ChangePriceSSDExecution3FinishEnd)
+
+		MessageEnd::ChangePriceSSDCallMessage1SendingEnd(StoreManager ChangePriceSSDCallMessage1)
+		ExecutionEnd::ChangePriceSSDExecution1StartEnd(ChangePriceService ChangePriceSSDExecution1)
+		ExecutionEnd::ChangePriceSSDExecution1FinishEnd(ChangePriceService ChangePriceSSDExecution1)
+		MessageEnd::ChangePriceSSDCallMessage1ReturnReceivingEnd(StoreManager ChangePriceSSDCallMessage1Return)
+		MessageEnd::ChangePriceSSDCallMessage3SendingEnd(StoreManager ChangePriceSSDCallMessage3)
+		ExecutionEnd::ChangePriceSSDExecution2StartEnd(ChangePriceService ChangePriceSSDExecution2)
+		ExecutionEnd::ChangePriceSSDExecution2FinishEnd(ChangePriceService ChangePriceSSDExecution2)
+		MessageEnd::ChangePriceSSDCallMessage3ReturnReceivingEnd(StoreManager ChangePriceSSDCallMessage3Return)
+		MessageEnd::ChangePriceSSDCallMessage5SendingEnd(StoreManager ChangePriceSSDCallMessage5)
+		ExecutionEnd::ChangePriceSSDExecution3StartEnd(ChangePriceService ChangePriceSSDExecution3)
+		ExecutionEnd::ChangePriceSSDExecution3FinishEnd(ChangePriceService ChangePriceSSDExecution3)
+		MessageEnd::ChangePriceSSDCallMessage5ReturnReceivingEnd(StoreManager ChangePriceSSDCallMessage5Return)
 
 	}
 
@@ -229,6 +296,25 @@ UseCaseModel CoCoME {
 
 //	[WorkFlow]
 //	OrderProductWF
+	}
+
+	Service OrderProductsService {
+
+		[Operation]
+		selectSupplier()
+		selectItemsToOrder(supplierId)
+		setOrderCount(number)
+		submitOrder()
+
+	}
+
+	Service ChangePriceService {
+
+		[Operation]
+		queryItems()
+		selectItem(itemId)
+		setNewPrice(itemId, price)
+
 	}
 
 	Contract CoCoMESystem::openStore(storeID : Integer) : Boolean {
