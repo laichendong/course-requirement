@@ -1,5 +1,7 @@
 # 软件需求分析与系统设计
 
+[toc]
+
 
 
 # Lab 01
@@ -229,11 +231,11 @@ UseCaseModel CoCoME { UseCaseContext CashierService { UC :: closeCashDesk() @Des
 
 ## 二、**面向对象详细设计自动生成**
 
-生成的DesignModel如下：
+生成的DesignModel如下： 类图和服务的时序图
 
 ![image-20250521154703500](./README.assets/image-20250521154703500-7813625.png)
 
-
+![image-20250522105838894](./README.assets/image-20250522105838894.png)
 
 ## 三、**大模型生成设计模型与微服务拆分**
 
@@ -564,3 +566,4 @@ classDiagram
 这种微服务架构设计使得系统具有高度的可扩展性、弹性和可维护性，各个功能模块可以独立开发、测试和部署。
 
 ​        
+
